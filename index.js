@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   View,
   ViewPropTypes,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash.isequal';
@@ -106,11 +105,11 @@ export default class Carousel extends Component {
     }
   }
 
-  componentWillUnmount() {
+  UNSAFE_componentWillUnmount() {
     this._clearTimer();
   }
 
-  componentWillReceiveProps({ children }) {
+  UNSAFE_componentWillReceiveProps({ children }) {
     if (!isEqual(this.props.children, children)) {
       const { currentPage } = this.state;
       this._clearTimer();
@@ -149,9 +148,9 @@ export default class Carousel extends Component {
       </Text></View>);
     }
     return pages.map((page, i) => (
-      <TouchableWithoutFeedback style={[{ ...size }, pageStyle]} key={`page${i}`}>
+      <TouchableOpacity activeOpacity={1} style={[{ ...size }, pageStyle]} key={`page${i}`}>
         {page}
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
     ));
   }
 
@@ -346,13 +345,13 @@ export default class Carousel extends Component {
     const bullets = [];
     for (let i = 0; i < pageLength; i += 1) {
       bullets.push(
-        <TouchableWithoutFeedback onPress={() => this.animateToPage(i)} key={`bullet${i}`}>
+        <TouchableOpacity activeOpacity={1} onPress={() => this.animateToPage(i)} key={`bullet${i}`}>
           <View
             style={i === this.state.currentPage ?
               [styles.chosenBullet, this.props.chosenBulletStyle] :
               [styles.bullet, this.props.bulletStyle]}
           />
-        </TouchableWithoutFeedback>);
+        </TouchableOpacity>);
     }
     return (
       <View style={[styles.bullets, this.props.bulletsContainerStyle]} pointerEvents="box-none">
